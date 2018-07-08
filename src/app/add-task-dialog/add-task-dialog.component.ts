@@ -9,6 +9,7 @@ export interface DialogData {
   notes: string;
   due: string;
   selectedTaskList: string;
+  parent: any;
 }
 
 @Component({
@@ -20,6 +21,7 @@ export class AddTaskDialogComponent implements OnInit {
   title = '';
   notes = '';
   due = '';
+  parent: any = {};
 
   constructor(
     public dialogRef: MatDialogRef<AddTaskDialogComponent>,
@@ -28,6 +30,7 @@ export class AddTaskDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.parent = this.data.parent;
     this.title = this.data.title;
     this.notes = this.data.notes;
     this.due = this.data.due;
@@ -45,18 +48,15 @@ export class AddTaskDialogComponent implements OnInit {
     if (!form.value.title) {
       return false;
     }
-    const taskInfo = {
-      title: '',
-      notes: '',
-      due: ''
-    };
+    const taskInfo: any = {};
+
     taskInfo.title = form.value.title;
     taskInfo.notes = form.value.notes || '';
     if (this.due) {
       taskInfo.due = this.due;
     }
 
-    this.taskService.addTask(this.data.selectedTaskList, taskInfo).subscribe((res) => {
+    this.taskService.addTask(this.data.selectedTaskList, taskInfo, this.parent).subscribe((res) => {
       this.dialogRef.close();
     });
   }

@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{task.title}}</h2>
 <mat-dialog-content>
-  <form #form="ngForm">
+  <form #form="ngForm" *ngIf="!data.readOnly; else details">
     <div class="form-field-container">
       <mat-form-field>
         <input matInput placeholder="Title" name="title" [(ngModel)]="task.title" #ctrl="ngModel">
@@ -17,8 +17,16 @@
       </mat-form-field>
     </div>
   </form>
+  <ng-template #details>
+    <div class="form-field-container">
+      <markdown [data]="data.task.notes"></markdown>
+      <mat-chip-list *ngIf="data.task.due">
+        <mat-chip color="accent" selected>{{data.task.due | date}}</mat-chip>
+      </mat-chip-list>
+    </div>
+  </ng-template>
 </mat-dialog-content>
-<mat-dialog-actions>
+<mat-dialog-actions *ngIf="!data.readOnly">
   <button mat-raised-button mat-dialog-close>Cancel</button>
   <button mat-raised-button color="accent" (click)="updateTask()">Update</button>
 </mat-dialog-actions>

@@ -57,6 +57,8 @@ export class DashboardComponent implements OnInit {
       data: {selectedTaskList: this.selectedTaskList, title: this.title, notes: this.notes, due: this.due}
     });
 
+    this.tasksUpdated = false;
+
     dialogRef.afterClosed().subscribe(() => {
       this.tasksUpdated = true;
     });

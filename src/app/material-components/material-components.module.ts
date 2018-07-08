@@ -12,7 +12,14 @@ import {
   MatGridListModule,
   MatCardModule,
   MatIconModule,
-  MatSelectModule, MatNativeDateModule, MatFormFieldModule, MatInputModule, MatChipsModule, MatBadgeModule, MatDialogModule
+  MatSelectModule,
+  MatNativeDateModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatChipsModule,
+  MatBadgeModule,
+  MatDialogModule,
+  MatTooltipModule
 } from '@angular/material';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
@@ -37,7 +44,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MatInputModule,
     MatChipsModule,
     MatBadgeModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTooltipModule
   ],
   exports: [
     MatButtonModule,
@@ -57,7 +65,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MatInputModule,
     MatChipsModule,
     MatBadgeModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTooltipModule
   ],
   declarations: []
 })

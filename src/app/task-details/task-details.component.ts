@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
 class UpdateDialogData {
   task: any;
   taskListId: string;
+  readOnly: boolean;
 }
 
 @Component({

@@ -10,35 +10,65 @@
   </button>
   <span class="fill-remaining-space"></span>
   <button mat-button color="accent" (click)="toggleSelectedTasks()">
-    <mat-icon></mat-icon> Toggle selected tasks
+    <mat-icon></mat-icon> Toggle completed tasks
   </button>
 </mat-toolbar>
 <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="4px" class="flex-wrap"
      fxFlexAlign="center center">
 
-  <mat-card *ngFor="let task of tasks" fxFlex="45">
+  <mat-card *ngFor="let task of tasks" fxFlex="100">
     <mat-card-header>
       <mat-card-title>{{task.due | date}}</mat-card-title>
       <mat-card-subtitle>
-        <mat-selection-list>
+        <mat-selection-list dense>
           <div fxLayout="row">
-            <button mat-icon-button class="mat-icon-button" (click)="editTask(task)">
+            <button mat-icon-button class="mat-icon-button" (click)="viewTask(task)" matTooltip="View task details">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button class="mat-icon-button" (click)="editTask(task)" matTooltip="Edit task">
               <mat-icon>edit</mat-icon>
             </button>
+            <button mat-icon-button class="mat-icon-button" (click)="addTask(task)" matTooltip="Add sub-task">
+              <mat-icon>add</mat-icon>
+            </button>
             <mat-list-option [selected]="task.selected" (click)="updateTask(task, true)">
-              <h4 matSubheader class="body-2">
+              <p matSubheader>
                 {{task.title}}
-              </h4>
+              </p>
             </mat-list-option>
+            <button mat-icon-button class="mat-icon-button" (click)="removeTask(task)" matTooltip="Remove task">
+              <mat-icon>clear</mat-icon>
+            </button>
           </div>
         </mat-selection-list>
       </mat-card-subtitle>
     </mat-card-header>
-    <mat-selection-list dense #taskList *ngFor="let child of task.children" fxLayout="column" role="listbox">
+    <mat-selection-list dense #taskList *ngFor="let child of task.children; index as i" fxLayout="column" role="listbox">
       <div fxLayout="row">
         <div>
-          <button mat-icon-button class="mat-icon-button" (click)="editTask(child)">
+          <button mat-icon-button class="mat-icon-button" (click)="move(child, task.children[i-1], true)" matTooltip="Move task up">
+            <mat-icon>arrow_drop_up</mat-icon>
+          </button>
+        </div>
+        <div>
+          <button [disabled]="!task.children[i+1]" mat-icon-button class="mat-icon-button"
+                  (click)="move(child, task.children[i+1], false)" matTooltip="Move task down">
+            <mat-icon>arrow_drop_down</mat-icon>
+          </button>
+        </div>
+        <div>
+          <button mat-icon-button class="mat-icon-button" (click)="viewTask(child)" matTooltip="View task details">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </div>
+        <div>
+          <button mat-icon-button class="mat-icon-button" (click)="editTask(child)" matTooltip="Edit task">
             <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <div>
+          <button mat-icon-button class="mat-icon-button" (click)="removeTask(child)" matTooltip="Remove task">
+            <mat-icon>clear</mat-icon>
           </button>
         </div>
         <div>

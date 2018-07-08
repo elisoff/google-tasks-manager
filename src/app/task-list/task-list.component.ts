@@ -3,6 +3,7 @@ import {TaskService} from '../task.service';
 import {MatDatepickerInputEvent, MatDialog} from '@angular/material';
 import {formatDate} from '@angular/common';
 import {TaskDetailsComponent} from '../task-details/task-details.component';
+import {AddTaskDialogComponent} from '../add-task-dialog/add-task-dialog.component';
 
 @Component({
   selector: 'app-task-list',
@@ -74,7 +75,9 @@ export class TaskListComponent implements OnInit, OnChanges {
         const parentIndex = parents.findIndex((parent) => {
           return parent.id === item.parent;
         });
-        parents[parentIndex].children.push(item);
+        if (parents[parentIndex]) {
+          parents[parentIndex].children.push(item);
+        }
       }
 
     }
@@ -180,10 +183,52 @@ export class TaskListComponent implements OnInit, OnChanges {
     });
   }
 
+  viewTask(task: any) {
+    const dialogRef = this.dialog.open(TaskDetailsComponent, {
+      width: '80%',
+      height: '80%',
+      data: {task: task, taskListId: this.taskListId, readOnly: true}
+    });
+
+    dialogRef.afterClosed().subscribe();
+  }
+
+  addTask(task: any) {
+    const dialogRef = this.dialog.open(AddTaskDialogComponent, {
+      width: '80%',
+      height: '80%',
+      data: {selectedTaskList: this.taskListId, parent: task}
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.getTasks(this.taskListId);
+    });
+  }
+
+  removeTask(task: any) {
+    this.taskService.removeTask(this.taskListId, task.id).subscribe((res) => {
+     if (!res) {
+       this.getTasks(this.taskListId);
+     }
+    });
+  }
+
+  move(task: any, previous: any, up: boolean) {
+    let toUpdate = task;
+    if (up && previous) {
+      toUpdate = previous;
+      previous = task;
+    }
+    this.taskService.moveTask(this.taskListId, toUpdate.id, toUpdate.parent, previous).subscribe((res) => {
+      if (res.kind) {
+        this.getTasks(this.taskListId);
+      }
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.taskListId.currentValue !== '' || (changes.tasksUpdated && changes.tasksUpdated.currentValue === true &&
-      changes.tasksUpdated.previousValue === false)) {
-      this.getTasks(changes.taskListId.currentValue);
+    if (changes.taskListId && changes.taskListId.currentValue !== '') {
+      this.getTasks(this.taskListId);
     }
   }
 

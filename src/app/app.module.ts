@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {LOCALE_ID, NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
+import { MarkdownModule } from 'ngx-markdown';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -14,7 +15,7 @@ import { TaskListComponent } from './task-list/task-list.component';
 import {MaterialComponentsModule} from './material-components/material-components.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {TasklistService} from './tasklist.service';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {HashLocationStrategy, LocationStrategy, registerLocaleData} from '@angular/common';
 import localePt from '@angular/common/locales/pt';
@@ -62,6 +63,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes, { useHash: true, onSameUrlNavigation: 'reload' }
     ),
+    MarkdownModule.forRoot({loader: HttpClient}),
     FlexLayoutModule,
     HttpClientModule,
     FormsModule

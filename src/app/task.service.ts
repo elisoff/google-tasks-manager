@@ -50,7 +50,7 @@ export class TaskService {
 
   }
 
-  addTask(taskListId: string, taskInfo: any) {
+  addTask(taskListId: string, taskInfo: any, parent: any) {
     const token = this.userService.getToken();
 
     const httpOptions = new HttpHeaders(
@@ -59,7 +59,13 @@ export class TaskService {
         'Authorization': 'Bearer ' + token
       });
 
-    const options = { params: new HttpParams().set('key', 'AIzaSyBIggrn7I0PdWPhghyt5laFsBZ1gimhRUE'), headers: httpOptions };
+    let params = new HttpParams().set('key', 'AIzaSyBIggrn7I0PdWPhghyt5laFsBZ1gimhRUE');
+
+    if (parent && parent.id) {
+      params = params.set('parent', parent.id);
+    }
+
+    const options = { params: params, headers: httpOptions };
 
     return this.http.post<TaskList>('https://www.googleapis.com/tasks/v1/lists/' + taskListId + '/tasks', taskInfo, options).pipe(
       tap(_ => _,
@@ -84,6 +90,51 @@ export class TaskService {
       .pipe(
       tap(_ => _,
         catchError(this.handleError<any>('updateTask'))
+      ));
+  }
+
+  removeTask(taskListId: string, taskId: string) {
+    const token = this.userService.getToken();
+
+    const httpOptions = new HttpHeaders(
+      {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      });
+
+    const options = { params: new HttpParams().set('key', 'AIzaSyBIggrn7I0PdWPhghyt5laFsBZ1gimhRUE'), headers: httpOptions };
+
+    return this.http.delete<any>('https://www.googleapis.com/tasks/v1/lists/' + taskListId + '/tasks/' + taskId, options)
+      .pipe(
+        tap(_ => _,
+          catchError(this.handleError<any>('remove'))
+        ));
+  }
+
+  moveTask(taskListId: string, taskId: string, parentId: string, previous: any) {
+    const token = this.userService.getToken();
+
+    const httpOptions = new HttpHeaders(
+      {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      });
+
+    let params = new HttpParams().set('key', 'AIzaSyBIggrn7I0PdWPhghyt5laFsBZ1gimhRUE');
+
+    if (previous && previous.id) {
+      params = params.set('previous', previous.id);
+    }
+    if (parentId) {
+      params = params.set('parent', parentId);
+    }
+
+    const options = { params: params, headers: httpOptions };
+
+    return this.http.post<TaskList>('https://www.googleapis.com/tasks/v1/lists/' + taskListId + '/tasks/' + taskId + '/move',
+      null, options).pipe(
+      tap(_ => _,
+        catchError(this.handleError<TaskList>('addTask'))
       ));
   }
 }
