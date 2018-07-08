@@ -1,0 +1,25 @@
+
+<h2 mat-dialog-title>New task</h2>
+<mat-dialog-content>
+  <form #f="ngForm">
+    <div class="form-field-container">
+      <mat-form-field>
+        <input matInput placeholder="Title" name="title" [(ngModel)]="title" #ctrl="ngModel">
+      </mat-form-field>
+
+      <mat-form-field>
+        <textarea matInput placeholder="Notes (you can use markdown here!)" rows="5" name="notes" ngModel></textarea>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Due date" name="due" (dateChange)="setDueDate($event)">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="accent" (click)="save(f)">Save</button>
+</mat-dialog-actions>

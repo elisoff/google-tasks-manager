@@ -1,0 +1,11 @@
+<mat-grid-list cols="2" rowHeight="2:1">
+  <mat-grid-tile [colspan]="2">
+    <div *ngIf="!isLoggedIn()" fxFlexAlign="center center">
+      <button mat-raised-button color="accent" (click)="signIn()">Sign In</button>
+    </div>
+    <div *ngIf="isLoggedIn()">
+      <button mat-raised-button color="accent" (click)="signOut()">Sign out</button>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+

@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+mat-card {
+  margin: 4px;
+}
+
+.fill-remaining-space {
+  /* This fills the remaining space, by using flexbox.
+     Every toolbar row uses a flexbox row layout. */
+  flex: 1 1 auto;
+}
+
+.mat-selection-list[dense] .mat-list-item .mat-list-item-content-reverse, .mat-selection-list[dense] .mat-list-option .mat-list-item-content-reverse {
+  flex-direction: row !important;
+}
+
+.mat-list-text {
+  padding-left: 8px !important;
+}
