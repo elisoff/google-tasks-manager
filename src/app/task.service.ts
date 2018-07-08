@@ -80,10 +80,10 @@ export class TaskService {
 
     const options = { params: new HttpParams().set('key', 'AIzaSyBIggrn7I0PdWPhghyt5laFsBZ1gimhRUE'), headers: httpOptions };
 
-    return this.http.put<TaskList>('https://www.googleapis.com/tasks/v1/lists/' + taskListId + '/tasks/' + taskId , taskInfo, options)
+    return this.http.put<any>('https://www.googleapis.com/tasks/v1/lists/' + taskListId + '/tasks/' + taskId , taskInfo, options)
       .pipe(
       tap(_ => _,
-        catchError(this.handleError<TaskList>('updateTask'))
+        catchError(this.handleError<any>('updateTask'))
       ));
   }
 }

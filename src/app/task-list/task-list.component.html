@@ -21,11 +21,16 @@
       <mat-card-title>{{task.due | date}}</mat-card-title>
       <mat-card-subtitle>
         <mat-selection-list>
-          <mat-list-option [selected]="task.selected" (click)="updateTask(task, true)">
-            <h4 matSubheader class="body-2">
-              {{task.title}}
-            </h4>
-          </mat-list-option>
+          <div fxLayout="row">
+            <button mat-icon-button class="mat-icon-button" (click)="editTask(task)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <mat-list-option [selected]="task.selected" (click)="updateTask(task, true)">
+              <h4 matSubheader class="body-2">
+                {{task.title}}
+              </h4>
+            </mat-list-option>
+          </div>
         </mat-selection-list>
       </mat-card-subtitle>
     </mat-card-header>

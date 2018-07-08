@@ -3,6 +3,7 @@ import {TasklistService} from '../tasklist.service';
 import {TaskService} from '../task.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {AddTaskDialogComponent} from '../add-task-dialog/add-task-dialog.component';
+import {ActivatedRoute, Router} from '@angular/router';
 
 export interface DialogData {
   title: string;
@@ -28,7 +29,9 @@ export class DashboardComponent implements OnInit {
 
   constructor(private taskListService: TasklistService,
               private taskService: TaskService,
-              public dialog: MatDialog) {}
+              public dialog: MatDialog,
+              private router: Router,
+              private route: ActivatedRoute) {}
 
   getTaskLists() {
     this.taskLists = [];
@@ -42,6 +45,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.selectedTaskList = (this.route.snapshot.paramMap.get('taskListId')) ?  this.route.snapshot.paramMap.get('taskListId') : '';
     this.getTaskLists();
   }
 
@@ -56,6 +60,10 @@ export class DashboardComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       this.tasksUpdated = true;
     });
+  }
+
+  taskListChanged(): void {
+    this.router.navigate(['/dashboard/' + this.selectedTaskList]).then();
   }
 }
 

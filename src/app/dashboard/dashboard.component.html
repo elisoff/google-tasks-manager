@@ -10,7 +10,7 @@
         <mat-card-content>
           <p>Select the task list you'd like to tackle now!</p>
           <mat-form-field>
-            <mat-select placeholder="Your task lists" [disabled]="!taskLists.length" [(value)]="selectedTaskList">
+            <mat-select placeholder="Your task lists" [disabled]="!taskLists.length" [(value)]="selectedTaskList" (valueChange)="taskListChanged()">
               <mat-option *ngFor="let taskList of taskLists" [value]="taskList.id">
                 {{taskList.title}}
               </mat-option>

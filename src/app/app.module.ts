@@ -16,7 +16,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {TasklistService} from './tasklist.service';
 import {HttpClientModule} from '@angular/common/http';
 
-import { registerLocaleData } from '@angular/common';
+import {HashLocationStrategy, LocationStrategy, registerLocaleData} from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { FilterDatePipe } from './filter-date.pipe';
 import {MatDialogConfig} from '@angular/material';
@@ -34,8 +34,9 @@ const gapiClientConfig: NgGapiClientConfig = {
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: '**', component: PagenotfoundComponent }
+  { path: 'dashboard', component: DashboardComponent, runGuardsAndResolvers: 'always'},
+  { path: 'dashboard/:taskListId', component: DashboardComponent },
+  { path: '**', component: PagenotfoundComponent },
 ];
 
 @NgModule({
@@ -59,7 +60,7 @@ const appRoutes: Routes = [
       useValue: gapiClientConfig
     }),
     RouterModule.forRoot(
-      appRoutes
+      appRoutes, { useHash: true, onSameUrlNavigation: 'reload' }
     ),
     FlexLayoutModule,
     HttpClientModule,

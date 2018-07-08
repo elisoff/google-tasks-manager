@@ -147,16 +147,23 @@ export class TaskListComponent implements OnInit, OnChanges {
   updateTask(task: any, toggle: boolean) {
 
     delete task.selected;
+    delete task.completed;
     if (task.formatted) {
       delete task.formatted;
     }
 
+    if (task.due) {
+      task.due = formatDate(task.due, 'y-MM-ddThh:mm:ss.000Z', 'en');
+    }
+
     if (toggle) {
-      task.status = task.status === 'completed' ? 'needsAction' : 'completed';
+      task.status = task.status === 'needsAction' ? 'completed' : 'needsAction';
     }
 
     this.taskService.updateTask(this.taskListId, task.id, task).subscribe((res) => {
-      console.log(res);
+      if (res.status === 'completed') {
+        task.selected = true;
+      }
 
     });
   }
@@ -165,16 +172,16 @@ export class TaskListComponent implements OnInit, OnChanges {
     const dialogRef = this.dialog.open(TaskDetailsComponent, {
       width: '80%',
       height: '80%',
-      data: {task: task}
+      data: {task: task, taskListId: this.taskListId}
     });
 
     dialogRef.afterClosed().subscribe(() => {
-      //this.tasksUpdated = true;
+      this.getTasks(this.taskListId);
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.taskListId.currentValue !== '' || (changes.tasksUpdated.currentValue === true &&
+    if (changes.taskListId.currentValue !== '' || (changes.tasksUpdated && changes.tasksUpdated.currentValue === true &&
       changes.tasksUpdated.previousValue === false)) {
       this.getTasks(changes.taskListId.currentValue);
     }
