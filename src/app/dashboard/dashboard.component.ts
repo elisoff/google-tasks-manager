@@ -24,6 +24,9 @@ export class DashboardComponent implements OnInit {
   title = '';
   notes = '';
   due = '';
+  tasklist = '';
+
+  showNewTaskList = false;
 
   tasksUpdated = false;
 
@@ -66,6 +69,32 @@ export class DashboardComponent implements OnInit {
 
   taskListChanged(): void {
     this.router.navigate(['/dashboard/' + this.selectedTaskList]).then();
+  }
+
+  addTaskList(): void {
+    this.showNewTaskList = true;
+  }
+
+  saveNewTaskList(): void {
+    const taskListInfo = {
+      title: this.tasklist
+    };
+    this.taskListService.addTaskList(taskListInfo).subscribe((res) => {
+      if (res.kind) {
+        this.getTaskLists();
+        this.taskListChanged();
+      }
+      this.showNewTaskList = false;
+    });
+  }
+
+  removeTaskList(): void {
+    this.taskListService.deleteTaskList(this.selectedTaskList).subscribe((res) => {
+      if (!res) {
+        this.getTaskLists();
+        this.router.navigate(['/dashboard']).then();
+      }
+    });
   }
 }
 

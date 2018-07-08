@@ -9,13 +9,23 @@
         </mat-card-header>
         <mat-card-content>
           <p>Select the task list you'd like to tackle now!</p>
-          <mat-form-field>
-            <mat-select placeholder="Your task lists" [disabled]="!taskLists.length" [(value)]="selectedTaskList" (valueChange)="taskListChanged()">
-              <mat-option *ngFor="let taskList of taskLists" [value]="taskList.id">
-                {{taskList.title}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <div fxLayout="row">
+            <mat-form-field>
+              <mat-select placeholder="Your task lists" [disabled]="!taskLists.length" [(value)]="selectedTaskList" (valueChange)="taskListChanged()">
+                <mat-option *ngFor="let taskList of taskLists" [value]="taskList.id">
+                  {{taskList.title}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-icon-button (click)="addTaskList()"><mat-icon matTooltip="Add new task list">add</mat-icon></button>
+            <button mat-icon-button (click)="removeTaskList()"><mat-icon matTooltip="Delete selected task list">delete</mat-icon></button>
+          </div>
+          <div *ngIf="showNewTaskList" fxLayout="row">
+            <mat-form-field>
+              <input matInput name="tasklist" [(ngModel)]="tasklist" placeholder="Task list name">
+            </mat-form-field>
+            <button mat-flat-button color="accent" (click)="saveNewTaskList()">Save</button>
+          </div>
         </mat-card-content>
       </mat-card>
       <mat-card>

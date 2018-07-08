@@ -49,4 +49,38 @@ export class TasklistService {
       ));
 
   }
+
+  addTaskList(taskListInfo: any) {
+    const token = this.userService.getToken();
+
+    const httpOptions = new HttpHeaders(
+      {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      });
+
+    const options = { params: new HttpParams().set('key', 'AIzaSyBIggrn7I0PdWPhghyt5laFsBZ1gimhRUE'), headers: httpOptions };
+
+    return this.http.post<TaskList>('https://www.googleapis.com/tasks/v1/users/@me/lists', taskListInfo, options).pipe(
+      tap(_ => _,
+        catchError(this.handleError<TaskList>('addTaskList'))
+      ));
+  }
+
+  deleteTaskList(taskListId: string) {
+    const token = this.userService.getToken();
+
+    const httpOptions = new HttpHeaders(
+      {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      });
+
+    const options = { params: new HttpParams().set('key', 'AIzaSyBIggrn7I0PdWPhghyt5laFsBZ1gimhRUE'), headers: httpOptions };
+
+    return this.http.delete<TaskList>('https://www.googleapis.com/tasks/v1/users/@me/lists/' + taskListId, options).pipe(
+      tap(_ => _,
+        catchError(this.handleError<TaskList>('deleteTaskList'))
+      ));
+  }
 }
